@@ -1,10 +1,12 @@
 import axios from "axios";
 
+
 const api = axios.create({
   baseURL: "https://0ba8-41-191-99-98.ngrok-free.app/api",
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: false, // Set to true only if your API uses cookies/sessions
 });
 
 // ===================== Products =====================
