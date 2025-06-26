@@ -78,6 +78,7 @@ function Home() {
 
   useEffect(() => {
     loadItems();
+    console.log("called")
   }, []);
 
   async function loadItems() {
@@ -85,6 +86,7 @@ function Home() {
     try {
       const data = await getCarouselItems();
       setItems(Array.isArray(data.data) ? data.data : []);
+      console.log("home data: \n",data)
     } catch (error) {
       console.error('Failed to fetch carousel items:', error);
       setItems([]);
