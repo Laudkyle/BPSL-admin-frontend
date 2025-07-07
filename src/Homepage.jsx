@@ -66,7 +66,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <div
       className={`bg-gray-800 text-white h-screen fixed md:relative transition-all duration-300 ease-in-out ${
-        isOpen ? "w-64" : "w-0 md:w-64"
+        isOpen ? "min-w-64" : "w-0 md:min-w-64"
       } overflow-hidden`}
     >
       <div className="p-4">

@@ -2,7 +2,6 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Homepage, { MainPage } from "./Homepage";
 import Home from "./Pages/Home";
-import About from "./Pages/About";
 import Stories from "./Pages/Stories";
 import Careers from "./Pages/Careers";
 import Awards from "./Pages/Awards";
@@ -21,7 +20,6 @@ function Pages({ toggleSidebar }) {
     <Routes>
       <Route path="/" element={<MainPage toggleSidebar={toggleSidebar} />} />
       <Route path="/home" element={<Home />} />
-      <Route path="/about" element={<About />}/>
       <Route path="/about/awards" element={<Awards />}/>
       <Route path="/products" element={<Products />}/>
       <Route path="/categories" element={<CategoryManager />}/>

@@ -26,7 +26,8 @@ import {
   createGalleryItem,
   updateGalleryItem,
   deleteGalleryItem,
-} from "../Api"; // your API file path
+} from "../Api"; 
+
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dinb6qtto/image/upload";
 const UPLOAD_PRESET = "fuelme";

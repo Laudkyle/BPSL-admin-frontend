@@ -19,7 +19,7 @@ import {
   deleteTeamMember,
   updateTeamMember,
   createTeamMember,
-} from "../Api"; // You already added these
+} from "../Api"; 
 import axios from "axios";
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dinb6qtto/image/upload";
@@ -251,19 +251,21 @@ const TeamsTable = () => {
   };
 
   const handleSubmit = async (data) => {
-    try {
-      if (editingTeam) {
-        await updateTeamMember(editingTeam.id || editingTeam._id, data);
-        toast.success("Updated successfully");
-      } else {
-        await createTeamMember(data);
-        toast.success("Created successfully");
-      }
-      fetchTeams();
-    } catch (err) {
-      toast.error("Failed to save team member");
+  try {
+    if (editingTeam) {
+      await updateTeamMember(editingTeam.id || editingTeam._id, data);
+      toast.success("Updated successfully");
+    } else {
+      await createTeamMember(data);
+      toast.success("Created successfully");
     }
-  };
+    fetchTeams();
+    setModalOpen(false); 
+    setEditingTeam(null); 
+  } catch (err) {
+    toast.error("Failed to save team member");
+  }
+};
 
   const columns = [
     {

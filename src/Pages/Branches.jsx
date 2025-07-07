@@ -11,6 +11,7 @@ import {
   deleteBranches,
 } from "../Api";
 
+
 import MapComponent from "./MapComponent";
 
 const BranchesManager = () => {

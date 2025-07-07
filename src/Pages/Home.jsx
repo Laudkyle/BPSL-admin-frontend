@@ -78,7 +78,6 @@ function Home() {
 
   useEffect(() => {
     loadItems();
-    console.log("called")
   }, []);
 
   async function loadItems() {
@@ -175,7 +174,7 @@ function Home() {
   };
 
   return (
-    <div className="w-full p-6">
+    <div className="p-6">
       <div className="flex justify-end mb-4">
         <button
           onClick={() => {
@@ -211,7 +210,7 @@ function Home() {
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-white  rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         {loading ? (
           <div className="flex justify-center items-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
@@ -227,7 +226,7 @@ function Home() {
                 items={currentItems.map(item => item.id.toString())}
                 strategy={verticalListSortingStrategy}
               >
-                <div className="overflow-x-auto">
+                <div className="overflow-x-auto max-w-[calc(100vw-300px)] overflow-scroll">
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>

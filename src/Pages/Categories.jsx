@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import DataTable from "react-data-table-component";
-import { Plus, Trash2, Pencil,  X } from "lucide-react";
+import { Plus, Trash2, Pencil, X } from "lucide-react";
 import api from "../Api";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CategoryManager() {
   const [categories, setCategories] = useState([]);
@@ -29,6 +31,7 @@ export default function CategoryManager() {
       setCategories(catRes.data);
       setSubcategories(subRes.data);
     } catch (error) {
+      toast.error("Failed to fetch data. Please try again later.");
       console.error("Failed to fetch data:", error);
     } finally {
       setIsLoading(false);
@@ -44,13 +47,16 @@ export default function CategoryManager() {
     try {
       if (form.id) {
         await api.updateCategory(form.id, { name: form.name });
+        toast.success("Category updated successfully!");
       } else {
         await api.createCategory({ name: form.name });
+        toast.success("Category created successfully!");
       }
       setForm({ id: null, name: "" });
       setShowCategoryForm(false);
       await fetchData();
     } catch (error) {
+      toast.error("Operation failed. Please try again.");
       console.error("Operation failed:", error);
     }
   };
@@ -64,13 +70,16 @@ export default function CategoryManager() {
       };
       if (subForm.id) {
         await api.updateSubcategory(subForm.id, data);
+        toast.success("Subcategory updated successfully!");
       } else {
         await api.createSubcategory(data);
+        toast.success("Subcategory created successfully!");
       }
       setSubForm({ id: null, name: "", category_id: "" });
       setShowSubcategoryForm(false);
       await fetchData();
     } catch (error) {
+      toast.error("Operation failed. Please try again.");
       console.error("Operation failed:", error);
     }
   };
@@ -90,14 +99,16 @@ export default function CategoryManager() {
       try {
         await api.deleteCategory(id);
         await fetchData();
+        toast.success("Category deleted successfully!");
       } catch (error) {
+        toast.error(error.response.data.error);
         console.error("Deletion failed:", error);
       }
     }
   };
 
   const editSubcategory = (sub) => {
-    setShowSubcategoryForm(true)
+    setShowSubcategoryForm(true);
     setSubForm(sub);
     subcategoryFormRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -107,7 +118,9 @@ export default function CategoryManager() {
       try {
         await api.deleteSubcategory(id);
         await fetchData();
+        toast.success("Subcategory deleted successfully!");
       } catch (error) {
+        toast.error(error.response.data.error);
         console.error("Deletion failed:", error);
       }
     }
@@ -127,9 +140,7 @@ export default function CategoryManager() {
           <button
             onClick={() => toggleCategoryExpand(row.id)}
             className="mr-2 text-gray-500 hover:text-gray-700"
-          >
-          
-          </button>
+          ></button>
           <span className="font-medium">{row.name}</span>
         </div>
       ),
@@ -155,7 +166,7 @@ export default function CategoryManager() {
           <button
             onClick={() => {
               setSubForm({ id: null, name: "", category_id: row.id });
-              setShowSubcategoryForm(true); // Show subcategory form
+              setShowSubcategoryForm(true);
               subcategoryFormRef.current?.scrollIntoView({
                 behavior: "smooth",
               });
@@ -243,6 +254,18 @@ export default function CategoryManager() {
 
   return (
     <div className="p-8 h-screen overflow-scroll w-full mx-auto">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold text-gray-800">
           Category Management
@@ -347,7 +370,10 @@ export default function CategoryManager() {
       {/* Modal for Subcategory Form */}
       {showSubcategoryForm && (
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-md p-6 w-1/3" ref={subcategoryFormRef}>
+          <div
+            className="bg-white rounded-lg shadow-md p-6 w-1/3"
+            ref={subcategoryFormRef}
+          >
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               {subForm.id ? "Edit Subcategory" : "Create New Subcategory"}
             </h3>
