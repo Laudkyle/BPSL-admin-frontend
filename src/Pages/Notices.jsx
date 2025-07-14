@@ -29,7 +29,7 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    category: "announcement",
+    category: "Security",
     image: "",
   });
 
@@ -44,7 +44,7 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
       setFormData({
         title: "",
         description: "",
-        category: "announcement",
+        category: "Security",
         image: "",
       });
       setImageFile(null);
