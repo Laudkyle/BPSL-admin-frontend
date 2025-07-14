@@ -117,9 +117,9 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
               className="w-full border p-2 pl-8 rounded"
               required
             >
-              <option value="BOG Notice">BOG Notice</option>
-              <option value="Finace Notice">Finance</option>
-              <option value="Security Notice">Security</option>
+              <option value="BOG Notices">BOG Notices</option>
+              <option value="Finance">Finance</option>
+              <option value="Security">Security</option>
             </select>
           </div>
 
