@@ -186,8 +186,8 @@ export const MainPage = ({ toggleSidebar }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Sample cards */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold mb-2">Recent Activity</h3>
-          <p className="text-gray-600">
+          <h3 className="text-lg font-semibold mb-2">Branches</h3>
+          <p className="text-gray-600 text-4xl">
             Check your latest activities and updates.
           </p>
         </div>

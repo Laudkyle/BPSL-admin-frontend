@@ -45,6 +45,8 @@ export const createAward = (data) => api.post("/awards", data);
 export const updateAward = (id, data) => api.put(`/awards/${id}`, data);
 export const deleteAward = (id) => api.delete(`/awards/${id}`);
 
+// ===================== Dashboard =====================
+export const getDashboardStats = () => api.get("/dashboard/stats");
 // ===================== Teams =====================
 export const getTeamMembers = () => api.get("/team");
 export const getTeamMember = (id) => api.get(`/team/${id}`);
@@ -105,6 +107,9 @@ export const createGalleryImage = (data) => api.post("/gallery_images", data);
 export const deleteGalleryImage = (id) => api.delete(`/gallery_images/${id}`);
 
 export default {
+    // Dashboard
+  getDashboardStats,
+  
   // Products
   getProducts,
   createProduct,
