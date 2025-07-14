@@ -51,8 +51,8 @@ function Products() {
       const reader = new FileReader();
       reader.onload = () => setImagePreview(reader.result);
       reader.readAsDataURL(imageFile[0]);
-    } else if (editingProduct?.image_url && !imageFile) {
-      setImagePreview(editingProduct.image_url);
+    } else if (editingProduct?.image && !imageFile) {
+      setImagePreview(editingProduct.image);
     } else if (!imageFile) {
       setImagePreview(null);
     }
@@ -153,7 +153,7 @@ function Products() {
 
   const onSubmit = async (data) => {
     try {
-      let imageUrl = editingProduct?.image_url || null;
+      let imageUrl = editingProduct?.image || null;
 
       // Upload new image if provided
       if (data.image && data.image[0]) {
@@ -167,7 +167,7 @@ function Products() {
         description: data.description,
         features: JSON.stringify(data.features || []),
         featured: data.featured ? 1 : 0,
-        image_url: imageUrl,
+        image: imageUrl,
       };
 
       if (editingProduct) {
@@ -242,7 +242,7 @@ function Products() {
     });
     
     setSelectedCategoryId(row.category_id?.toString() || "");
-    setImagePreview(row.image_url || null);
+    setImagePreview(row.image || null);
   };
 
   const closeModal = () => {

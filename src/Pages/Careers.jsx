@@ -24,13 +24,13 @@ const RolesManager = () => {
     location: '',
     type: '',
     description: '',
-    payStart: '',
-    payEnd: '',
+    pay_start: '',
+    pay_end: '',
     skills: [''],
     responsibilities: [''],
     qualifications: [''],
     certifications: [''],
-    salaryBenefits: ['']
+    salary_benefits: ['']
   });
 
   // Fetch all roles
@@ -104,13 +104,13 @@ const RolesManager = () => {
       location: role.location,
       type: role.type,
       description: role.description,
-      payStart: role.payStart,
-      payEnd: role.payEnd,
+      pay_start: role.pay_start,
+      pay_end: role.pay_end,
       skills: role.skills,
       responsibilities: role.responsibilities,
       qualifications: role.qualifications,
       certifications: role.certifications,
-      salaryBenefits: role.salaryBenefits
+      salary_benefits: role.salary_benefits
     });
     setIsModalOpen(true);
   };
@@ -153,13 +153,13 @@ const categories = ["All", ...new Set([...defaultCategories, ...roleCategories])
               location: '',
               type: '',
               description: '',
-              payStart: '',
-              payEnd: '',
+              pay_start: '',
+              pay_end: '',
               skills: [''],
               responsibilities: [''],
               qualifications: [''],
               certifications: [''],
-              salaryBenefits: ['']
+              salary_benefits: ['']
             });
             setIsModalOpen(true);
           }}
@@ -219,7 +219,7 @@ const categories = ["All", ...new Set([...defaultCategories, ...roleCategories])
                 </div>
                 <p className="text-gray-600 mb-1">{role.location} • {role.type}</p>
                 <p className="text-gray-800 font-medium mb-3">
-                  ${role.payStart} - ${role.payEnd}
+                  ${role.pay_start} - ${role.pay_end}
                 </p>
                 <p className="text-gray-700 mb-4 line-clamp-2">{role.description}</p>
                 
@@ -331,8 +331,8 @@ const categories = ["All", ...new Set([...defaultCategories, ...roleCategories])
                     <label className="block text-sm font-medium mb-1">Salary Start ($)</label>
                     <input
                       type="number"
-                      name="payStart"
-                      value={formData.payStart}
+                      name="pay_start"
+                      value={formData.pay_start}
                       onChange={handleInputChange}
                       className="w-full p-2 border rounded"
                       required
@@ -343,8 +343,8 @@ const categories = ["All", ...new Set([...defaultCategories, ...roleCategories])
                     <label className="block text-sm font-medium mb-1">Salary End ($)</label>
                     <input
                       type="number"
-                      name="payEnd"
-                      value={formData.payEnd}
+                      name="pay_end"
+                      value={formData.pay_end}
                       onChange={handleInputChange}
                       className="w-full p-2 border rounded"
                       required
@@ -365,7 +365,7 @@ const categories = ["All", ...new Set([...defaultCategories, ...roleCategories])
                 </div>
 
                 {/* Array Fields */}
-                {['skills', 'responsibilities', 'qualifications', 'certifications', 'salaryBenefits'].map((field) => (
+                {['skills', 'responsibilities', 'qualifications', 'certifications', 'salary_benefits'].map((field) => (
                   <div key={field} className="mb-6">
                     <div className="flex justify-between items-center mb-2">
                       <label className="block text-sm font-medium capitalize">
