@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "./images/logo/logo-p.png";
 import {
@@ -14,6 +14,7 @@ import {
   Package2,
 } from "lucide-react";
 import Pages from "./Pages";
+import { getDashboardStats } from "./Api";
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
 
@@ -152,12 +153,73 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     </div>
   );
 };
-
 // MainPage Component
 export const MainPage = ({ toggleSidebar }) => {
+  const [dashboardStats, setDashboardStats] = useState({
+    totalBranches: 0,
+    totalProducts: 0,
+    totalOpenRoles: 0,
+    latestNotices: []
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await getDashboardStats();
+        setDashboardStats(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+        console.error('Failed to fetch dashboard stats:', err);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex-1 p-4 md:p-8">
+        <div className="md:hidden flex items-center justify-between mb-4">
+          <img src={logo} alt="Logo" className="w-36 h-10" />
+          <button
+            onClick={toggleSidebar}
+            className="bg-gray-200 p-2 rounded-md focus:outline-none"
+          >
+            {/* Menu icon */}
+          </button>
+        </div>
+        <div className="flex justify-center items-center h-64">
+          <p>Loading dashboard data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex-1 p-4 md:p-8">
+        <div className="md:hidden flex items-center justify-between mb-4">
+          <img src={logo} alt="Logo" className="w-36 h-10" />
+          <button
+            onClick={toggleSidebar}
+            className="bg-gray-200 p-2 rounded-md focus:outline-none"
+          >
+            {/* Menu icon */}
+          </button>
+        </div>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+          Error loading dashboard: {error}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex-1 p-4 md:p-8">
-      {/* Mobile menu button */}
       {/* Mobile top bar with logo and menu button */}
       <div className="md:hidden flex items-center justify-between mb-4">
         <img src={logo} alt="Logo" className="w-36 h-10" />
@@ -165,54 +227,83 @@ export const MainPage = ({ toggleSidebar }) => {
           onClick={toggleSidebar}
           className="bg-gray-200 p-2 rounded-md focus:outline-none"
         >
-          <svg
-            className="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
+          {/* Menu icon */}
         </button>
       </div>
 
       <h1 className="text-2xl font-bold mb-6">Welcome to Your Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Sample cards */}
+        {/* Branches Card */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold mb-2">Branches</h3>
-          <p className="text-gray-600 text-4xl">
-            Check your latest activities and updates.
+          <p className="text-gray-600 text-4xl font-bold">
+            {dashboardStats.totalBranches}
           </p>
+          <p className="text-sm text-gray-500 mt-2">Total branches across all regions</p>
         </div>
 
+        {/* Products Card */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold mb-2">Statistics</h3>
-          <p className="text-gray-600">View your performance metrics.</p>
+          <h3 className="text-lg font-semibold mb-2">Total Products</h3>
+          <p className="text-gray-600 text-4xl font-bold">
+            {dashboardStats.totalProducts}
+          </p>
+          <p className="text-sm text-gray-500 mt-2">Products in your catalog</p>
         </div>
 
+        {/* Open Roles Card */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold mb-2">Notifications</h3>
-          <p className="text-gray-600">You have 3 new notifications.</p>
+          <h3 className="text-lg font-semibold mb-2">Open Roles</h3>
+          <p className="text-gray-600 text-4xl font-bold">
+            {dashboardStats.totalOpenRoles}
+          </p>
+          <p className="text-sm text-gray-500 mt-2">Current job openings</p>
         </div>
       </div>
 
+      {/* Recent Notices Section */}
       <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-semibold mb-4">Recent Updates</h3>
-        <p className="text-gray-600">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in dui
-          mauris. Vivamus hendrerit arcu sed erat molestie vehicula.
-        </p>
+        <h3 className="text-lg font-semibold mb-4">Recent Notices</h3>
+        {dashboardStats.latestNotices.length > 0 ? (
+          <ul className="divide-y divide-gray-200">
+            {dashboardStats.latestNotices.map(notice => (
+              <li key={notice.id} className="py-3">
+                <div className="flex items-center space-x-4">
+                  {notice.image && (
+                    <div className="flex-shrink-0">
+                      <img 
+                        className="h-10 w-10 rounded-full object-cover" 
+                        src={notice.image} 
+                        alt={notice.title} 
+                      />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-900 truncate">
+                      {notice.title}
+                    </p>
+                    <p className="text-sm text-gray-500 truncate">
+                      {notice.description}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      {notice.category}
+                    </span>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-600">No recent notices found</p>
+        )}
       </div>
     </div>
   );
 };
+
 
 // Homepage Component
 function Homepage() {
