@@ -24,6 +24,8 @@ const BranchesManager = () => {
   const [selectedRegion, setSelectedRegion] = useState("");
   const [branchTotal, setBranchTotal] = useState("");
   const [selectedLocation, setSelectedLocation] = useState(null);
+  const [inputMethod, setInputMethod] = useState("manual"); // 'manual' or 'map'
+
 
   // Form state
   const [formData, setFormData] = useState({
@@ -60,8 +62,17 @@ const BranchesManager = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    
+    // Update selectedLocation when manual inputs change
+    if (name === "lat" || name === "lng") {
+      if (formData.lat && formData.lng) {
+        setSelectedLocation({
+          lat: name === "lat" ? value : formData.lat,
+          lng: name === "lng" ? value : formData.lng
+        });
+      }
+    }
   };
-
   // Handle map location selection
   const handleMapClick = (lat, lng) => {
     setSelectedLocation({ lat, lng });
@@ -336,7 +347,7 @@ const BranchesManager = () => {
                         onChange={handleInputChange}
                         className="w-full p-2 border rounded"
                         placeholder="Click map to select"
-                        readOnly
+                        
                       />
                     </div>
                     <div>
@@ -350,7 +361,7 @@ const BranchesManager = () => {
                         onChange={handleInputChange}
                         className="w-full p-2 border rounded"
                         placeholder="Click map to select"
-                        readOnly
+                        
                       />
                     </div>
                   </div>
