@@ -14,13 +14,7 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import {
-  getNotices,
-  deleteNotice,
-  updateNotice,
-  createNotice,
-} from "../Api"; 
-
+import { getNotices, deleteNotice, updateNotice, createNotice } from "../Api";
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dinb6qtto/image/upload";
 const UPLOAD_PRESET = "fuelme";
@@ -31,8 +25,9 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
     description: "",
     category: "Security",
     image: "",
+    document: "",
   });
-
+  const [documentFile, setDocumentFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -59,16 +54,20 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
     if (file) setImageFile(file);
   };
 
-  const uploadToCloudinary = async (file) => {
+  const uploadToCloudinary = async (file, resourceType = "image") => {
     if (typeof file === "string") return file;
     const data = new FormData();
     data.append("file", file);
     data.append("upload_preset", UPLOAD_PRESET);
+
     try {
-      const res = await axios.post(CLOUDINARY_URL, data);
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/dinb6qtto/${resourceType}/upload`,
+        data
+      );
       return res.data.secure_url;
     } catch (err) {
-      toast.error("Image upload failed");
+      toast.error(`Upload failed: ${resourceType}`);
       return null;
     }
   };
@@ -76,17 +75,35 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    const image = await uploadToCloudinary(imageFile || formData.image);
+
+    const image = await uploadToCloudinary(
+      imageFile || formData.image,
+      "image"
+    );
+    const document = documentFile
+      ? await uploadToCloudinary(documentFile, "raw")
+      : formData.document;
+
     if (!image) {
       setIsLoading(false);
       return;
     }
-    const dataToSubmit = { ...formData, image };
+
+    const dataToSubmit = {
+      ...formData,
+      image,
+      document,
+    };
+
     await onSubmit(dataToSubmit);
     setIsLoading(false);
     onClose();
   };
 
+  const handleDocumentChange = (e) => {
+    const file = e.target.files[0];
+    if (file) setDocumentFile(file);
+  };
   if (!isOpen) return null;
 
   return (
@@ -97,7 +114,10 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
-            <BookText className="absolute left-2 top-2.5 text-gray-400" size={18} />
+            <BookText
+              className="absolute left-2 top-2.5 text-gray-400"
+              size={18}
+            />
             <input
               name="title"
               value={formData.title}
@@ -109,7 +129,10 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
           </div>
 
           <div className="relative">
-            <Layers className="absolute left-2 top-2.5 text-gray-400" size={18} />
+            <Layers
+              className="absolute left-2 top-2.5 text-gray-400"
+              size={18}
+            />
             <select
               name="category"
               value={formData.category}
@@ -124,7 +147,10 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
           </div>
 
           <div className="relative">
-            <AlignLeft className="absolute left-2 top-2.5 text-gray-400" size={18} />
+            <AlignLeft
+              className="absolute left-2 top-2.5 text-gray-400"
+              size={18}
+            />
             <textarea
               name="description"
               value={formData.description}
@@ -134,24 +160,62 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
               required
             />
           </div>
+          {/* Related Image Upload */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Related Image
+            </label>
+            <div className="relative">
+              <Upload
+                className="absolute left-2 top-2.5 text-gray-400"
+                size={18}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="w-full border p-2 pl-8 rounded"
+              />
+            </div>
 
-          <div className="relative">
-            <Upload className="absolute left-2 top-2.5 text-gray-400" size={18} />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="w-full border p-2 pl-8 rounded"
-            />
+            {formData.image && typeof formData.image === "string" && (
+              <img
+                src={formData.image}
+                alt="Preview"
+                className="w-16 h-16 object-cover mt-2 rounded"
+              />
+            )}
           </div>
 
-          {formData.image && typeof formData.image === "string" && (
-            <img
-              src={formData.image}
-              alt="Preview"
-              className="w-16 h-16 object-cover mt-2 rounded"
-            />
-          )}
+          {/* Related Document Upload */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Related File (PDF, DOC, DOCX)
+            </label>
+            <div className="relative">
+              <Upload
+                className="absolute left-2 top-2.5 text-gray-400"
+                size={18}
+              />
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={handleDocumentChange}
+                className="w-full border p-2 pl-8 rounded"
+              />
+            </div>
+
+            {formData.document && typeof formData.document === "string" && (
+              <a
+                href={formData.document}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 text-sm underline mt-2 inline-block"
+              >
+                View Attached Document
+              </a>
+            )}
+          </div>
 
           <div className="flex justify-end gap-2">
             <button
