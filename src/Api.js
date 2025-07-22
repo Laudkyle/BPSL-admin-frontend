@@ -5,7 +5,6 @@ const api = axios.create({
   baseURL: "https://bpsl-admin-backend.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
-      'ngrok-skip-browser-warning': 'true'
   },
   withCredentials: false, 
 });
@@ -84,6 +83,13 @@ export const updateArticle = (id, data) =>
   api.put(`/content/articles/${id}`, data);
 export const deleteArticle = (id) => api.delete(`/content/articles/${id}`);
 
+// ===================== Reports =====================
+export const getReports = () => api.get("/report");
+export const createReport = (data) => api.post("/report", data);
+export const updateReport = (id, data) =>
+  api.put(`/report/${id}`, data);
+export const deleteReport = (id) => api.delete(`/report/${id}`);
+
 // ===================== Blogs =====================
 export const getBlogs = () => api.get("/content/blogs");
 export const getBlog = (id) => api.get(`/content/blogs/${id}`);
@@ -141,6 +147,12 @@ export default {
   createAward,
   updateAward,
   deleteAward,
+
+  // Reprots
+  getReports,
+  createReport,
+  updateReport,
+  deleteReport,
 
   // Teams
   getTeamMembers,

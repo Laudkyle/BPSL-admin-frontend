@@ -54,24 +54,32 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
     if (file) setImageFile(file);
   };
 
-  const uploadToCloudinary = async (file, resourceType = "image") => {
-    if (typeof file === "string") return file;
-    const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", UPLOAD_PRESET);
-
-    try {
-      const res = await axios.post(
-        `https://api.cloudinary.com/v1_1/dinb6qtto/${resourceType}/upload`,
-        data
-      );
-      return res.data.secure_url;
-    } catch (err) {
-      toast.error(`Upload failed: ${resourceType}`);
-      return null;
-    }
-  };
-
+const uploadToCloudinary = async (file, resourceType = "image") => {
+  if (typeof file === "string") return file;
+  
+  // Add file size check
+  const maxSize = resourceType === "raw" ? 15 * 1024 * 1024 : 12 * 1024 * 1024; // 10MB for raw, 5MB for images
+  if (file.size > maxSize) {
+    toast.error(`File too large. Max size: ${maxSize / (1024 * 1024)}MB`);
+    return null;
+  }
+  
+  const data = new FormData();
+  data.append("file", file);
+  data.append("upload_preset", UPLOAD_PRESET);
+  
+  try {
+    const res = await axios.post(
+      `https://api.cloudinary.com/v1_1/dinb6qtto/${resourceType}/upload`,
+      data
+    );
+    return res.data.secure_url;
+  } catch (err) {
+    console.error(`Upload error (${resourceType}):`, err.response?.data || err.message);
+    toast.error(`Upload failed: ${resourceType} - ${err.response?.data?.error?.message || 'Unknown error'}`);
+    return null;
+  }
+};
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
