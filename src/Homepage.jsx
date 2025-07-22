@@ -59,6 +59,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       icon: <Settings size={18} />,
       subItems: [
         { name: "Branches", path: "/settings/branches" },
+        { name: "Reports", path: "/settings/reports" },
      
       ],
     },

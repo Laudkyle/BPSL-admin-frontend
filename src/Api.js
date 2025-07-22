@@ -84,11 +84,11 @@ export const updateArticle = (id, data) =>
 export const deleteArticle = (id) => api.delete(`/content/articles/${id}`);
 
 // ===================== Reports =====================
-export const getReports = () => api.get("/report");
-export const createReport = (data) => api.post("/report", data);
-export const updateReport = (id, data) =>
+export const getAnnualReports = () => api.get("/report");
+export const createAnnualReport = (data) => api.post("/report", data);
+export const updateAnnualReport = (id, data) =>
   api.put(`/report/${id}`, data);
-export const deleteReport = (id) => api.delete(`/report/${id}`);
+export const deleteAnnualReport = (id) => api.delete(`/report/${id}`);
 
 // ===================== Blogs =====================
 export const getBlogs = () => api.get("/content/blogs");
@@ -149,10 +149,10 @@ export default {
   deleteAward,
 
   // Reprots
-  getReports,
-  createReport,
-  updateReport,
-  deleteReport,
+  getAnnualReports,
+  createAnnualReport,
+  updateAnnualReport,
+  deleteAnnualReport,
 
   // Teams
   getTeamMembers,
