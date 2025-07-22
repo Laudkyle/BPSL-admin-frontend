@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "./images/logo/logo-p.png";
 import {
@@ -60,7 +60,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       subItems: [
         { name: "Branches", path: "/settings/branches" },
         { name: "Reports", path: "/settings/reports" },
-     
       ],
     },
   ];
@@ -160,7 +159,7 @@ export const MainPage = ({ toggleSidebar }) => {
     totalBranches: 0,
     totalProducts: 0,
     totalOpenRoles: 0,
-    latestNotices: []
+    latestNotices: [],
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -174,7 +173,7 @@ export const MainPage = ({ toggleSidebar }) => {
       } catch (err) {
         setError(err.message);
         setLoading(false);
-        console.error('Failed to fetch dashboard stats:', err);
+        console.error("Failed to fetch dashboard stats:", err);
       }
     };
 
@@ -241,7 +240,9 @@ export const MainPage = ({ toggleSidebar }) => {
           <p className="text-gray-600 text-4xl font-bold">
             {dashboardStats.totalBranches}
           </p>
-          <p className="text-sm text-gray-500 mt-2">Total branches across all regions</p>
+          <p className="text-sm text-gray-500 mt-2">
+            Total branches across all regions
+          </p>
         </div>
 
         {/* Products Card */}
@@ -268,15 +269,15 @@ export const MainPage = ({ toggleSidebar }) => {
         <h3 className="text-lg font-semibold mb-4">Recent Notices</h3>
         {dashboardStats.latestNotices.length > 0 ? (
           <ul className="divide-y divide-gray-200">
-            {dashboardStats.latestNotices.map(notice => (
+            {dashboardStats.latestNotices.map((notice) => (
               <li key={notice.id} className="py-3">
                 <div className="flex items-center space-x-4">
                   {notice.image && (
                     <div className="flex-shrink-0">
-                      <img 
-                        className="h-10 w-10 rounded-full object-cover" 
-                        src={notice.image} 
-                        alt={notice.title} 
+                      <img
+                        className="h-10 w-10 rounded-full object-cover"
+                        src={notice.image}
+                        alt={notice.title}
                       />
                     </div>
                   )}
@@ -285,7 +286,8 @@ export const MainPage = ({ toggleSidebar }) => {
                       {notice.title}
                     </p>
                     <p className="text-sm text-gray-500 truncate">
-                      {notice.description}
+                      {notice.description.split(" ").slice(0, 12).join(" ")}
+                      {notice.description.split(" ").length > 12 && "..."}
                     </p>
                   </div>
                   <div>
@@ -304,7 +306,6 @@ export const MainPage = ({ toggleSidebar }) => {
     </div>
   );
 };
-
 
 // Homepage Component
 function Homepage() {
