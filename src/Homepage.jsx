@@ -234,7 +234,7 @@ export const MainPage = ({ toggleSidebar }) => {
 
       <h1 className="text-2xl text-center font-bold mb-6">Dashboard</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Branches Card */}
         <div className="bg-white p-6 rounded-lg shadow-md">
           <h3 className="text-lg font-semibold mb-2">Branches</h3>
@@ -251,6 +251,14 @@ export const MainPage = ({ toggleSidebar }) => {
           <h3 className="text-lg font-semibold mb-2">Total Products</h3>
           <p className="text-gray-600 text-4xl font-bold">
             {dashboardStats.totalProducts}
+          </p>
+          <p className="text-sm text-gray-500 mt-2">Products in your catalog</p>
+        </div>
+        {/* Cutomer Card */}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h3 className="text-lg font-semibold mb-2">Total Customer</h3>
+          <p className="text-gray-600 text-4xl font-bold">
+            {dashboardStats.totalCustomers}
           </p>
           <p className="text-sm text-gray-500 mt-2">Products in your catalog</p>
         </div>
