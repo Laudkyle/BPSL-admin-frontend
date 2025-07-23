@@ -4,11 +4,10 @@ import { Pencil, Trash2, Plus, Calendar, Hash, Loader2 } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
-  getCustomerCounts,
-  createCustomerCount,
-  updateCustomerCount,
-  deleteCustomerCount,
-  getLatestCustomerCount,
+  getCustomers,
+  createCustomer,
+  updateCustomer,
+  deleteCustomer,
 } from "../Api";
 
 const CustomerCountModal = ({ isOpen, onClose, onSubmit, entry }) => {
@@ -102,7 +101,7 @@ const CustomerCounts = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const res = await getCustomerCounts();
+      const res = await getCustomers();
       setEntries(res.data);
     } catch (err) {
       toast.error("Failed to fetch entries");
@@ -119,7 +118,7 @@ const CustomerCounts = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this entry?")) {
       try {
-        await deleteCustomerCount(id);
+        await deleteCustomer(id);
         toast.success("Entry deleted");
         fetchData();
       } catch (err) {
@@ -142,10 +141,10 @@ const CustomerCounts = () => {
   const handleSubmit = async (data) => {
     try {
       if (editingEntry) {
-        await updateCustomerCount(editingEntry.id, data);
+        await updateCustomer(editingEntry.id, data);
         toast.success("Entry updated");
       } else {
-        await createCustomerCount(data);
+        await createCustomer(data);
         toast.success("Entry created");
       }
       fetchData();
