@@ -40,7 +40,10 @@ const CustomerCountModal = ({ isOpen, onClose, onSubmit, entry }) => {
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
-            <Calendar className="absolute left-2 top-2.5 text-gray-400" size={18} />
+            <Calendar
+              className="absolute left-2 top-2.5 text-gray-400"
+              size={18}
+            />
             <input
               type="date"
               name="date"
@@ -157,7 +160,7 @@ const CustomerCounts = () => {
   const columns = [
     {
       name: "Date",
-      selector: (row) => row.date,
+      selector: (row) => row.date.slice(0, 10),
       sortable: true,
     },
     {
