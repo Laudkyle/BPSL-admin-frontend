@@ -254,13 +254,13 @@ export const MainPage = ({ toggleSidebar }) => {
           </p>
           <p className="text-sm text-gray-500 mt-2">Products in your catalog</p>
         </div>
+
         {/* Cutomer Card */}
         <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-lg font-semibold mb-2">Total Customer</h3>
+          <h3 className="text-lg font-semibold mb-2">Total Customers</h3>
           <p className="text-gray-600 text-4xl font-bold">
             {dashboardStats.totalCustomers}
           </p>
-          <p className="text-sm text-gray-500 mt-2">Products in your catalog</p>
         </div>
 
         {/* Open Roles Card */}
