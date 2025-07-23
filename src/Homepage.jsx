@@ -60,6 +60,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       subItems: [
         { name: "Branches", path: "/settings/branches" },
         { name: "Reports", path: "/settings/reports" },
+        { name: "Customer Count", path: "/settings/counts" },
       ],
     },
   ];

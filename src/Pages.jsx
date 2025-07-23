@@ -14,6 +14,7 @@ import {ContentManagerTabs} from "./Pages/Stories";
 import GalleryImagesManager from "./Pages/GalleryManager";
 import BranchesManager from "./Pages/Branches";
 import AnnualReportsTable from "./Pages/Reports";
+import CustomerCounts from "./Pages/CustomerCounts";
 
 
 function Pages({ toggleSidebar }) {
@@ -27,6 +28,7 @@ function Pages({ toggleSidebar }) {
       <Route path="/notices" element={<Notices />}/>
       <Route path="/settings/branches" element={<BranchesManager />}/>
       <Route path="/settings/reports" element={<AnnualReportsTable />}/>
+      <Route path="/settings/counts" element={<CustomerCounts />}/>
       <Route path="/awards" element={<Awards />}/>
       <Route path="/careers" element={<Careers />}/>
       <Route path="/stories" element={<ContentManagerTabs />}/>
