@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getProducts, getNotices, getAwards } from "../Api";
+import { getProducts, getNotices, getAwards,getArticles } from "../Api";
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dinb6qtto/image/upload";
 const UPLOAD_PRESET = "fuelme";
@@ -20,6 +20,7 @@ function CarouselForm({ initialData = null, onSubmit, onCancel }) {
   const [products, setProducts] = useState([]);
   const [notices, setNotices] = useState([]);
   const [awards, setAwards] = useState([]);
+  const [articles, setArticles] = useState([]);
 
   // Load initial data if editing
   useEffect(() => {
@@ -54,6 +55,9 @@ function CarouselForm({ initialData = null, onSubmit, onCancel }) {
         // Fetch notices
         const noticesRes = await getNotices();
         setNotices(noticesRes.data);
+        // Fetch articles
+        const articlesRes = await getArticles();
+        setArticles(articlesRes.data);
 
         // Fetch awards
         const awardsRes = await getAwards();
@@ -208,7 +212,7 @@ function CarouselForm({ initialData = null, onSubmit, onCancel }) {
                   key={`product-${product.id}`}
                   value={`products/${product.subcategory}/${product.title}`}
                 >
-                  {product.title}
+                  {product.title.toUpperCase()}
                 </option>
               ))}
             </optgroup>
@@ -220,24 +224,36 @@ function CarouselForm({ initialData = null, onSubmit, onCancel }) {
                   key={`notice-${notice.id}`}
                   value={`notices/${notice.id}`}
                 >
-                  {notice.title || `Notice ${notice.id}`}
+                  {notice.title.toUpperCase() || `Notice ${notice.id}`}
+                </option>
+              ))}
+            </optgroup>
+
+            {/* Articles Group */}
+            <optgroup label="News">
+              {articles.map((article) => (
+                <option
+                  key={`Article-${article.id}`}
+                  value={`Article/${article.id}`}
+                >
+                  {article.title.toUpperCase() || `Article ${article.id}`}
                 </option>
               ))}
             </optgroup>
             {/* Static Pages Group */}
             <optgroup label="Pages">
-              <option value="contact">Contact Page</option>
-              <option value="careers">Careers Page</option>
-              <option value="about">About Page</option>
-              <option value="privacy">Privacy Page</option>
-              <option value="reports">Annual Report Page</option>
+              <option value="contact">CONTACT PAGE</option>
+              <option value="careers">CAREER PAGE</option>
+              <option value="about">ABOUT PAGE</option>
+              <option value="privacy">PRIVACY PAGE</option>
+              <option value="reports">ANNUAL REPORT PAGE</option>
             </optgroup>
 
             {/* Awards Group */}
             <optgroup label="Awards">
               {awards.map((award) => (
                 <option key={`award-${award.id}`} value={`award/${award.id}`}>
-                  {award.title || `Award ${award.id}`}
+                  {award.title.toUpperCase() || `Award ${award.id}`}
                 </option>
               ))}
             </optgroup>
