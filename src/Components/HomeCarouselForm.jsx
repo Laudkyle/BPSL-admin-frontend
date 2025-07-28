@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getProducts } from '../Api';
-
+import { getProducts, getNotices, getAwards } from '../Api';
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dinb6qtto/image/upload";
 const UPLOAD_PRESET = "fuelme";
@@ -18,7 +17,10 @@ function CarouselForm({ initialData = null, onSubmit, onCancel }) {
   });
   const [loading, setLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
-  const [products, setProducts] = useState([])  // <-- products state
+  const [products, setProducts] = useState([]);
+  const [notices, setNotices] = useState([]);
+  const [awards, setAwards] = useState([]);
+
   // Load initial data if editing
   useEffect(() => {
     if (initialData) {
@@ -42,19 +44,27 @@ function CarouselForm({ initialData = null, onSubmit, onCancel }) {
     }
   }, [initialData]);
 
-
- useEffect(() => {
-    async function fetchProducts() {
+  useEffect(() => {
+    async function fetchData() {
       try {
-        const res = await getProducts()
-        setProducts(res.data) 
+        // Fetch products
+        const productsRes = await getProducts();
+        setProducts(productsRes.data);
+
+        // Fetch notices
+        const noticesRes = await getNotices();
+        setNotices(noticesRes.data);
+
+        // Fetch awards
+        const awardsRes = await getAwards();
+        setAwards(awardsRes.data);
       } catch (error) {
-        console.error('Failed to fetch products:', error)
-        toast.error('Failed to load products')
+        console.error('Failed to fetch data:', error);
+        toast.error('Failed to load data');
       }
     }
-    fetchProducts()
-  }, [])
+    fetchData();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, files, type } = e.target;
@@ -109,7 +119,7 @@ function CarouselForm({ initialData = null, onSubmit, onCancel }) {
     const submitData = {
       title: formData.title,
       text: formData.text,
-      image: imageUrl || formData.image, // use existing image URL if no new upload
+      image: imageUrl || formData.image, 
       link: formData.link,
       text_btn: formData.text_btn,
     };
@@ -166,9 +176,9 @@ function CarouselForm({ initialData = null, onSubmit, onCancel }) {
           />
         </div>
 
-         {/* Associated Product select */}
+        {/* Associated Product/Notice/Award select */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Associated Product</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Associated Link</label>
           <select
             name="link"
             value={formData.link}
@@ -176,12 +186,34 @@ function CarouselForm({ initialData = null, onSubmit, onCancel }) {
             required
             className="w-full p-3 border border-gray-300 rounded-lg"
           >
-            <option value="" disabled>Select a product link</option>
-            {products.map(product => (
-              <option key={product.id} value={product.name}>
-                {product.title || product.name || 'Untitled Product'}
-              </option>
-            ))}
+            <option value="" disabled>Select a link</option>
+            
+            {/* Products Group */}
+            <optgroup label="Products">
+              {products.map(product => (
+                <option key={`product-${product.id}`} value={`products/${product.subcategory}/${product.title}`}>
+                  {product.title}
+                </option>
+              ))}
+            </optgroup>
+
+            {/* Notices Group */}
+            <optgroup label="Notices">
+              {notices.map(notice => (
+                <option key={`notice-${notice.id}`} value={`notice/${notice.id}`}>
+                  {notice.title || `Notice ${notice.id}`}
+                </option>
+              ))}
+            </optgroup>
+
+            {/* Awards Group */}
+            <optgroup label="Awards">
+              {awards.map(award => (
+                <option key={`award-${award.id}`} value={`award/${award.id}`}>
+                  {award.title || `Award ${award.id}`}
+                </option>
+              ))}
+            </optgroup>
           </select>
         </div>
 
@@ -230,4 +262,5 @@ function CarouselForm({ initialData = null, onSubmit, onCancel }) {
     </div>
   );
 }
+
 export default CarouselForm;
