@@ -9,6 +9,18 @@ const api = axios.create({
   withCredentials: false, 
 });
 
+
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("api_token"); 
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 // ===================== Products =====================
 export const getProducts = () => api.get("/products");
 export const createProduct = (data) => api.post("/products", data);
