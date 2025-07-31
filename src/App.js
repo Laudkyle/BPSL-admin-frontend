@@ -3,7 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import Homepage from "./Homepage";
 import axios from "axios";
 
-import React, { useState } from "react";
+import { useState } from "react";
 
 const Login = ({ onLogin }) => {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -18,10 +18,9 @@ const Login = ({ onLogin }) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
+const url =  process.env.REACT_APP_AUTH_URL;
     try {
-      const response = await axios.post(
-      process.env.authURL,
+      const response = await axios.post(url,
         {
           appName:'HRMS',
           user: credentials.username,
