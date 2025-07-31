@@ -15,7 +15,9 @@ import {
 } from "lucide-react";
 import Pages from "./Pages";
 import { getDashboardStats } from "./Api";
-const Sidebar = ({ isOpen, toggleSidebar }) => {
+
+
+const Sidebar = ({ isOpen, toggleSidebar, onLogout }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   const toggleDropdown = (name) => {
@@ -28,11 +30,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       name: "Products",
       icon: <Package size={18} />,
       subItems: [
-        {
-          name: "Categories",
-          path: "/categories",
-          icon: <Package2 size={18} />,
-        },
+        { name: "Categories", path: "/categories", icon: <Package2 size={18} /> },
         { name: "Product List", path: "/products" },
       ],
     },
@@ -62,6 +60,12 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
         { name: "Reports", path: "/settings/reports" },
         { name: "Customer Count", path: "/settings/counts" },
       ],
+    },
+    // 👇 Logout button
+    {
+      name: "Logout",
+      icon: <X size={18} />,
+      action: onLogout,
     },
   ];
 
@@ -95,7 +99,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <ul className="space-y-2">
             {navItems.map((item) => (
               <li key={item.name}>
-                {item.subItems ? (
+                {item.action ? (
+                  // Logout item
+                  <button
+                    onClick={item.action}
+                    className="flex items-center gap-2 w-full text-left py-2 px-4 rounded hover:bg-red-600 transition-colors"
+                  >
+                    {item.icon}
+                    {item.name}
+                  </button>
+                ) : item.subItems ? (
                   <div>
                     <button
                       onClick={() => toggleDropdown(item.name)}
@@ -154,6 +167,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     </div>
   );
 };
+
 // MainPage Component
 export const MainPage = ({ toggleSidebar }) => {
   const [dashboardStats, setDashboardStats] = useState({
@@ -317,8 +331,7 @@ export const MainPage = ({ toggleSidebar }) => {
   );
 };
 
-// Homepage Component
-function Homepage() {
+function Homepage({ onLogout }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -327,7 +340,7 @@ function Homepage() {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
-      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} onLogout={onLogout} />
       <Pages toggleSidebar={toggleSidebar} />
     </div>
   );
