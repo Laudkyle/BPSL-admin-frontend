@@ -21,7 +21,7 @@ const Login = ({ onLogin }) => {
 
     try {
       const response = await axios.post(
-       'http://bp-ho-gcupdate.Bestpointgh.com:8093/verification/LocalAccount/UserNameOrPhoneOrEmailAndPassword',
+      process.env.authURL,
         {
           appName:'HRMS',
           user: credentials.username,
