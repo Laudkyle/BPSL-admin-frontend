@@ -22,14 +22,13 @@ const Login = ({ onLogin }) => {
       const response = await login(credentials);
 
       const data = response.data;
-      console.log(data)
 
-      if (response.status === 200 && data.access_token) {
+      if (response.status === 200 && data.token) {
         // Save to localStorage
-        localStorage.setItem('api_token', data.access_token);
-        localStorage.setItem('user_name', data.profile.fullName);
-        localStorage.setItem('user_email', data.profile.email);
-        localStorage.setItem('employee_id', data.profile.id);
+        localStorage.setItem('api_token', data.token);
+        localStorage.setItem('user_name', data.user.username);
+        localStorage.setItem('user_email', data.user.email);
+        localStorage.setItem('employee_id', data.user.id);
 
         onLogin(); // allow switch to Homepage
       } else {
