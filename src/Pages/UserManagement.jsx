@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { FaEdit, FaTrash, FaUserPlus, FaLock, FaUnlock } from 'react-icons/fa';
-import API from '../Api';
 import { toast } from 'react-toastify';
+import { 
+  getUsers,
+  createUser as createUserApi,
+  updateUser as updateUserApi,
+  deleteUser as deleteUserApi,
+  updateUserStatus
+} from '../Api'; 
 
 const UsersManagement = () => {
   const [users, setUsers] = useState([]);
@@ -24,7 +30,7 @@ const UsersManagement = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await API.get('/users');
+      const response = await getUsers();
       setUsers(response.data);
     } catch (error) {
       toast.error('Failed to fetch users');
@@ -41,24 +47,24 @@ const UsersManagement = () => {
   const handleCreateOrUpdate = async () => {
     try {
       if (currentUser) {
-        await API.put(`/users/${currentUser.id}`, formData);
+        await updateUserApi(currentUser.id, formData);
         toast.success('User updated successfully!');
       } else {
-        await API.post('/register', formData);
+        await createUserApi(formData);
         toast.success('User created successfully!');
       }
       fetchUsers();
       setShowModal(false);
       setFormData({ email: '', username: '', phone: '', password: '', role: 'user' });
     } catch (error) {
-      toast.error(error);
+      toast.error(error.message || 'An error occurred');
     }
   };
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        await API.delete(`/users/${id}`);
+        await deleteUserApi(id);
         toast.success('User deleted');
         fetchUsers();
       } catch (error) {
@@ -67,9 +73,9 @@ const UsersManagement = () => {
     }
   };
 
-  const toggleStatus = async (id, status) => {
+  const toggleStatus = async (id, currentStatus) => {
     try {
-      await API.put(`/users/${id}/status`, { active: status === "active" ? "Inactive" : "active" });
+      await updateUserStatus(id, { active: currentStatus === "active" ? "inactive" : "active" });
       toast.success('Status updated');
       fetchUsers();
     } catch (error) {
