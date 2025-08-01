@@ -137,8 +137,18 @@ export const getGalleryImages = (id) =>
 export const getGalleryImage = (id) => api.get(`/gallery_images${id}`);
 export const createGalleryImage = (data) => api.post("/gallery_images", data);
 export const deleteGalleryImage = (id) => api.delete(`/gallery_images/${id}`);
+// ===================== Authentication =====================
+export const login = (credentials) => api.post("/auth/login", {
+  email: credentials.email,
+  password: credentials.password
+});
+
+export const getCurrentUser = () => api.get("/auth/me");
 
 export default {
+    // Authentication
+  login,
+  getCurrentUser,
     // Dashboard
   getDashboardStats,
   
