@@ -2,7 +2,7 @@
 import { BrowserRouter } from "react-router-dom";
 import Homepage from "./Homepage";
 import axios from "axios";
-
+import { createUser } from "./Api";
 import { useState } from "react";
 
 const Login = ({ onLogin }) => {
@@ -20,14 +20,7 @@ const Login = ({ onLogin }) => {
     setError('');
 const url =  process.env.REACT_APP_AUTH_URL;
     try {
-      const response = await axios.post(url,
-        {
-          appName:'HRMS',
-          user: credentials.username,
-          password: credentials.password,
-          validateAppAcess: true
-        }
-      );
+      const response = await createUser(url);
 
       const data = response.data;
       console.log(data)
