@@ -71,6 +71,13 @@ export const createCareer = (data) => api.post("/roles", data);
 export const updateCareers = (id, data) => api.put(`/roles/${id}`, data);
 export const deleteCareers = (id) => api.delete(`/roles/${id}`);
 
+// ===================== Users =====================
+export const getUsers = () => api.get("/users");
+export const createUser = (data) => api.post("/users", data);
+export const updateUser = (id, data) => api.put(`/users/${id}`, data);
+export const updateUserStatus = (id, data) => api.put(`/users/${id}/status`, data);
+export const deleteUser = (id) => api.delete(`/users/${id}`);
+
 
 // ===================== Branches =====================
 export const getBranches = () => api.get("/branches");
@@ -195,6 +202,12 @@ deleteCustomer,
   updateNotice,
   deleteNotice,
 
+   // Users
+  getUsers,
+  createUser,
+  updateUser,
+  updateUserStatus,
+  deleteUser,
   // Articles
   getArticles,
   getArticle,

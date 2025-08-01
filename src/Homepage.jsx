@@ -59,9 +59,10 @@ const Sidebar = ({ isOpen, toggleSidebar, onLogout }) => {
         { name: "Branches", path: "/settings/branches" },
         { name: "Reports", path: "/settings/reports" },
         { name: "Customer Count", path: "/settings/counts" },
+        { name: "User Management", path: "/settings/users" },
       ],
     },
-    // 👇 Logout button
+   
     {
       name: "Logout",
       icon: <X size={18} />,
