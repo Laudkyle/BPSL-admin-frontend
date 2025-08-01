@@ -2,7 +2,7 @@
 import { BrowserRouter } from "react-router-dom";
 import Homepage from "./Homepage";
 import axios from "axios";
-import { createUser } from "./Api";
+import { login } from "./Api";
 import { useState } from "react";
 
 const Login = ({ onLogin }) => {
@@ -18,9 +18,8 @@ const Login = ({ onLogin }) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-const url =  process.env.REACT_APP_AUTH_URL;
     try {
-      const response = await createUser(url);
+      const response = await login(credentials);
 
       const data = response.data;
       console.log(data)
