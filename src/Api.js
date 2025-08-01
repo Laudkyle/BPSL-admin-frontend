@@ -78,7 +78,6 @@ export const updateUser = (id, data) => api.put(`/users/${id}`, data);
 export const updateUserStatus = (id, data) => api.put(`/users/${id}/status`, data);
 export const deleteUser = (id) => api.delete(`/users/${id}`);
 
-
 // ===================== Branches =====================
 export const getBranches = () => api.get("/branches");
 export const getRegions = () => api.get("/branches/regions");
