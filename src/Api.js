@@ -50,6 +50,7 @@ export const updateCarouselItem = (id, data) =>
 export const deleteCarouselItem = (id) => api.delete(`/carousel/${id}`);
 export const updateDisplayOrder = (data) =>
   api.patch("/carousel/display-order", data);
+
 // ===================== Awards =====================
 export const getAwards = () => api.get("/awards");
 export const createAward = (data) => api.post("/awards", data);
@@ -64,6 +65,8 @@ export const getTeamMember = (id) => api.get(`/team/${id}`);
 export const createTeamMember = (data) => api.post("/team", data);
 export const updateTeamMember = (id, data) => api.put(`/team/${id}`, data);
 export const deleteTeamMember = (id) => api.delete(`/team/${id}`);
+export const updateTeamDisplayOrder = (data) =>
+  api.patch("/team/display-order", data);
 // ===================== Careers =====================
 export const getCareers = () => api.get("/roles");
 export const getCareer = (id) => api.get(`/roles/${id}`);
