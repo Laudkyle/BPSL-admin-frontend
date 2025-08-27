@@ -373,6 +373,7 @@ const TeamsTable = () => {
         });
 
         toast.success("Order updated successfully");
+        fetchTeams()
       } catch (error) {
         console.error('Failed to update display order:', error);
         toast.error("Failed to update order");
