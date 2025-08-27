@@ -25,7 +25,7 @@ const BranchesManager = () => {
   const [selectedRegion, setSelectedRegion] = useState("");
   const [branchTotal, setBranchTotal] = useState("");
   const [selectedLocation, setSelectedLocation] = useState(null);
-  const [inputMethod, setInputMethod] = useState("manual"); // 'manual' or 'map'
+  const [inputMethod, setInputMethod] = useState("manual"); 
 
 
   // Form state
