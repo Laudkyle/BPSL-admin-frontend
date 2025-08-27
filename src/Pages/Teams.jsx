@@ -371,6 +371,7 @@ const TeamsTable = () => {
             display_order: index + 1
           }))
         });
+
         toast.success("Order updated successfully");
       } catch (error) {
         console.error('Failed to update display order:', error);
