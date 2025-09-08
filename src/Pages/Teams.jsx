@@ -41,8 +41,8 @@ import {
 } from "../Api"; 
 import axios from "axios";
 
-const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dinb6qtto/image/upload";
-const UPLOAD_PRESET = "fuelme";
+const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dvadtratp/image/upload";
+const UPLOAD_PRESET = "bestpointgh";
 
 // Sortable Row Component
 const SortableTableRow = ({ id, children, isDragDisabled = false }) => {
