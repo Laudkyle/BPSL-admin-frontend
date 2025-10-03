@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 /* ========== STANDARD WIDTH ========== */
+
 @font-face {
   font-family: 'Bricolage Grotesque';
   src: url('./fonts/BricolageGrotesque-ExtraLight.ttf') format('truetype');
