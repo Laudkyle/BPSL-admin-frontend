@@ -70,7 +70,7 @@ const uploadToCloudinary = async (file, resourceType = "image") => {
   
   try {
     const res = await axios.post(
-      `https://api.cloudinary.com/v1_1/dinb6qtto/${resourceType}/upload`,
+      `https://api.cloudinary.com/v1_1/dvadtratp/${resourceType}/upload`,
       data
     );
     return res.data.secure_url;
