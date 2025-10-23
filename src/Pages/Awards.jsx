@@ -185,7 +185,7 @@ const AwardsTable = () => {
   React.useEffect(() => {
     fetchAwards();
   }, []);
-console.log(awards)
+// console.log(awards)
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this award?")) {
       try {
