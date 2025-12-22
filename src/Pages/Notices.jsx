@@ -39,8 +39,7 @@ import {
   deleteNotice,
   updateNotice,
   createNotice,
-  // ✅ YOU MUST ADD THIS API FUNCTION
-  // updateNoticesDisplayOrder,
+  updateNoticesDisplayOrder,
 } from "../Api";
 
 const UPLOAD_PRESET = "bestpointgh";
