@@ -505,17 +505,14 @@ const NoticesWithOrdering = () => {
     setNotices(withOrder);
 
     try {
-      // ✅ You must implement this endpoint in your API/backend
-      // await updateNoticesDisplayOrder({
-      //   items: withOrder.map((n) => ({
-      //     id: n.id,
-      //     display_order: n.display_order,
-      //   })),
-      // });
+      await updateNoticesDisplayOrder({
+        items: withOrder.map((n) => ({
+          id: n.id,
+          display_order: n.display_order,
+        })),
+      });
 
-      // Temporary: if you haven't wired backend yet
-      // comment this toast once backend is ready
-      toast.info("Order updated locally. Wire backend to persist ordering.");
+      toast.success("Order updated sucessfully!!!");
     } catch (err) {
       console.error("Failed to update notice order:", err);
       toast.error("Failed to save order. Reverting...");
