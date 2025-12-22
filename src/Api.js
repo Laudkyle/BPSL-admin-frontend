@@ -94,6 +94,8 @@ export const getNotices = () => api.get("/notices");
 export const getNotice = (id) => api.get(`/notices/${id}`);
 export const createNotice = (data) => api.post("/notices", data);
 export const updateNotice = (id, data) => api.put(`/notices/${id}`, data);
+export const updateNoticesDisplayOrder = (data) =>
+  api.patch("/notices/display-order", data);
 export const deleteNotice = (id) => api.delete(`/notices/${id}`);
 
 // ===================== Customers =====================
