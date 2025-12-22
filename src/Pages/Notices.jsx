@@ -26,6 +26,7 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
     category: "Security",
     image: "",
     document: "",
+    links: [], // ✅ NEW
   });
   const [documentFile, setDocumentFile] = useState(null);
   const [imageFile, setImageFile] = useState(null);
@@ -33,16 +34,23 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
 
   useEffect(() => {
     if (notice) {
-      setFormData(notice);
+      setFormData({
+        ...notice,
+        links: notice.links || [],
+      });
       setImageFile(null);
+      setDocumentFile(null);
     } else {
       setFormData({
         title: "",
         description: "",
         category: "Security",
         image: "",
+        document: "",
+        links: [],
       });
       setImageFile(null);
+      setDocumentFile(null);
     }
   }, [notice]);
 
@@ -50,44 +58,71 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (file) setImageFile(file);
   };
 
-const uploadToCloudinary = async (file, resourceType = "image") => {
-  if (typeof file === "string") return file;
-  
-  // Add file size check
-  const maxSize = resourceType === "raw" ? 15 * 1024 * 1024 : 12 * 1024 * 1024; // 10MB for raw, 5MB for images
-  if (file.size > maxSize) {
-    toast.error(`File too large. Max size: ${maxSize / (1024 * 1024)}MB`);
-    return null;
-  }
-  
-  const data = new FormData();
-  data.append("file", file);
-  data.append("upload_preset", UPLOAD_PRESET);
-  
-  try {
-    const res = await axios.post(
-      `https://api.cloudinary.com/v1_1/dvadtratp/${resourceType}/upload`,
-      data
-    );
-    return res.data.secure_url;
-  } catch (err) {
-    console.error(`Upload error (${resourceType}):`, err.response?.data || err.message);
-    toast.error(`Upload failed: ${resourceType} - ${err.response?.data?.error?.message || 'Unknown error'}`);
-    return null;
-  }
-};
+  const handleDocumentChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) setDocumentFile(file);
+  };
+
+  // ✅ NEW: link handlers
+  const handleLinkChange = (index, value) => {
+    const updatedLinks = [...(formData.links || [])];
+    updatedLinks[index] = value;
+    setFormData({ ...formData, links: updatedLinks });
+  };
+
+  const addLink = () => {
+    setFormData({ ...formData, links: [...(formData.links || []), ""] });
+  };
+
+  const removeLink = (index) => {
+    const updatedLinks = (formData.links || []).filter((_, i) => i !== index);
+    setFormData({ ...formData, links: updatedLinks });
+  };
+
+  const uploadToCloudinary = async (file, resourceType = "image") => {
+    if (typeof file === "string") return file;
+
+    // Add file size check
+    const maxSize =
+      resourceType === "raw" ? 15 * 1024 * 1024 : 12 * 1024 * 1024; // raw vs images
+    if (file?.size > maxSize) {
+      toast.error(`File too large. Max size: ${maxSize / (1024 * 1024)}MB`);
+      return null;
+    }
+
+    const data = new FormData();
+    data.append("file", file);
+    data.append("upload_preset", UPLOAD_PRESET);
+
+    try {
+      const res = await axios.post(
+        `https://api.cloudinary.com/v1_1/dvadtratp/${resourceType}/upload`,
+        data
+      );
+      return res.data.secure_url;
+    } catch (err) {
+      console.error(
+        `Upload error (${resourceType}):`,
+        err.response?.data || err.message
+      );
+      toast.error(
+        `Upload failed: ${resourceType} - ${
+          err.response?.data?.error?.message || "Unknown error"
+        }`
+      );
+      return null;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const image = await uploadToCloudinary(
-      imageFile || formData.image,
-      "image"
-    );
+    const image = await uploadToCloudinary(imageFile || formData.image, "image");
     const document = documentFile
       ? await uploadToCloudinary(documentFile, "raw")
       : formData.document;
@@ -97,10 +132,16 @@ const uploadToCloudinary = async (file, resourceType = "image") => {
       return;
     }
 
+    // Clean links: remove blanks and trim
+    const cleanedLinks = (formData.links || [])
+      .map((l) => (typeof l === "string" ? l.trim() : ""))
+      .filter(Boolean);
+
     const dataToSubmit = {
       ...formData,
       image,
       document,
+      links: cleanedLinks,
     };
 
     await onSubmit(dataToSubmit);
@@ -108,10 +149,6 @@ const uploadToCloudinary = async (file, resourceType = "image") => {
     onClose();
   };
 
-  const handleDocumentChange = (e) => {
-    const file = e.target.files[0];
-    if (file) setDocumentFile(file);
-  };
   if (!isOpen) return null;
 
   return (
@@ -120,6 +157,7 @@ const uploadToCloudinary = async (file, resourceType = "image") => {
         <h2 className="text-xl font-bold mb-4">
           {notice ? "Edit" : "Add"} Notice
         </h2>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">
             <BookText
@@ -128,7 +166,7 @@ const uploadToCloudinary = async (file, resourceType = "image") => {
             />
             <input
               name="title"
-              value={formData.title}
+              value={formData.title || ""}
               onChange={handleChange}
               placeholder="Title"
               className="w-full border p-2 pl-8 rounded"
@@ -143,7 +181,7 @@ const uploadToCloudinary = async (file, resourceType = "image") => {
             />
             <select
               name="category"
-              value={formData.category}
+              value={formData.category || "Security"}
               onChange={handleChange}
               className="w-full border p-2 pl-8 rounded"
               required
@@ -161,13 +199,51 @@ const uploadToCloudinary = async (file, resourceType = "image") => {
             />
             <textarea
               name="description"
-              value={formData.description}
+              value={formData.description || ""}
               onChange={handleChange}
               placeholder="Description"
               className="w-full border p-2 pl-8 rounded"
               required
             />
           </div>
+
+          {/* ✅ NEW: Related Links */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Related Links
+            </label>
+
+            <div className="space-y-2">
+              {(formData.links || []).map((link, index) => (
+                <div key={index} className="flex gap-2">
+                  <input
+                    type="url"
+                    placeholder="https://example.com"
+                    value={link}
+                    onChange={(e) => handleLinkChange(index, e.target.value)}
+                    className="w-full border p-2 rounded"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeLink(index)}
+                    className="px-3 bg-red-500 text-white rounded"
+                    aria-label="Remove link"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={addLink}
+              className="mt-2 text-sm text-blue-600 hover:underline"
+            >
+              + Add another link
+            </button>
+          </div>
+
           {/* Related Image Upload */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -233,6 +309,7 @@ const uploadToCloudinary = async (file, resourceType = "image") => {
             >
               Cancel
             </button>
+
             <button
               type="submit"
               className={clsx(
