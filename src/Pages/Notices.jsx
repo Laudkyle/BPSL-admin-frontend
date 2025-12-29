@@ -79,9 +79,7 @@ const SortableTableRow = ({ id, children }) => {
   );
 };
 
-/* -----------------------------
-   Notice Modal (from your Notices code)
------------------------------- */
+
 const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
   const [formData, setFormData] = useState({
     title: "",
@@ -374,9 +372,7 @@ const NoticeModal = ({ isOpen, onClose, onSubmit, notice }) => {
   );
 };
 
-/* -----------------------------
-   Notices with Ordering (Replacement for Home)
------------------------------- */
+
 const NoticesWithOrdering = () => {
   const [notices, setNotices] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -452,7 +448,7 @@ const NoticesWithOrdering = () => {
         await updateNotice(editingNotice.id, data);
         toast.success("Updated successfully");
       } else {
-        // If you want new notices to appear at top, you can set display_order = 1 in backend
+        
         await createNotice(data);
         toast.success("Created successfully");
       }
@@ -477,8 +473,7 @@ const NoticesWithOrdering = () => {
 
     if (!over || active.id === over.id) return;
 
-    // IMPORTANT: ordering is within CURRENT PAGE only (like your Home implementation).
-    // If you want cross-page drag ordering, we can change approach.
+   
     const oldIndex = currentItems.findIndex(
       (n) => n.id.toString() === active.id.toString()
     );
